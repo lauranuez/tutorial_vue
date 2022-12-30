@@ -1,26 +1,12 @@
 <template>
   <div class="topStyle">
     <div style="margin-left: 25%">
-      <b-button
-        @click="primaryClicked"
-        style="margin: 1%; width: 15%"
-        variant="primary"
-        >Primary</b-button
-      >
-      <b-button style="margin: 1%; width: 15%" variant="secondary"
-        >Secondary</b-button
-      >
-      <b-button style="margin: 1%; width: 15%" variant="success"
-        >Success</b-button
-      >
-      <b-button style="margin: 1%; width: 15%" variant="danger"
-        >Danger</b-button
-      >
+      <b-button @click="alertClicked" style="margin: 1%; width: 15%" variant="primary">Alert</b-button>
+      <b-button style="margin: 1%; width: 15%" variant="secondary">Secondary</b-button>
+      <b-button style="margin: 1%; width: 15%" variant="success">Success</b-button>
+      <b-button style="margin: 1%; width: 15%" variant="danger">Danger</b-button>
     </div>
-    <b-input-group
-      prepend="New user"
-      style="width: 50%; margin-left: 22%; margin-top: 1%"
-    >
+    <b-input-group prepend="New user" style="width: 50%; margin-left: 22%; margin-top: 1%">
       <b-form-input placeholder="name here" v-model="username"></b-form-input>
       <b-form-input placeholder="age here" v-model="age"></b-form-input>
       <b-input-group-append>
@@ -30,26 +16,29 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent,ref } from "vue";
+<script >
+import { defineComponent, ref, inject } from "vue";
+import Swal from "sweetalert2";
 
 export default defineComponent({
   setup() {
-    let username= ref(undefined);
+    let username = ref(undefined);
     let age = ref(undefined);
-    function primaryClicked() {
-      console.log("Primary clicked");
+    const emitter = inject('emitter');
+    function alertClicked() {
+      Swal.fire("Alert clicked");
     }
-    function InputUsername(){
-        console.log('name: ', username.value, 'age: ', age.value);
-        username.value = undefined;
-        age.value = undefined;
+    function InputUsername() {
+      console.log("name: ", username.value, "age: ", age.value);
+      emitter.emit('newUser', {'name':username.value, 'age': age.value});
+      username.value = undefined;
+      age.value = undefined;
     }
     return {
-      primaryClicked,
+      alertClicked,
       InputUsername,
       username,
-      age
+      age,
     };
   },
 });

@@ -1,0 +1,29 @@
+[33mcommit 2813c580eabb0b8f7126a360271cdf7bcf4e294b[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: lauranuez <lauranuezzaragoza@gmail.com>
+Date:   Fri Dec 30 20:02:16 2022 +0100
+
+    Step4: Boostrap buttons and input
+
+[33mcommit 48b71a16611bfa43fa93d314b0830da2271eadc0[m
+Author: lauranuez <lauranuezzaragoza@gmail.com>
+Date:   Fri Dec 30 18:21:29 2022 +0100
+
+    Step3: connect buttom
+
+[33mcommit f224093bdba8c59b89a8b94157536b85d04d800b[m
+Author: lauranuez <lauranuezzaragoza@gmail.com>
+Date:   Fri Dec 30 17:50:10 2022 +0100
+
+    Step2: basic layout
+
+[33mcommit 96e49c9760022d9cb3ac28caf49afd7eee688041[m
+Author: lauranuez <lauranuezzaragoza@gmail.com>
+Date:   Fri Dec 30 11:57:04 2022 +0100
+
+    Step1: demo vue structure
+
+[33mcommit d471df4c38a6f8063daf20b7bc8602bc401e3994[m
+Author: lauranuez <lauranuezzaragoza@gmail.com>
+Date:   Fri Dec 30 11:19:33 2022 +0100
+
+    init
