@@ -1,26 +1,64 @@
 <template>
-    <div class = "topStyle">
-        Top
+  <div class="topStyle">
+    <div style="margin-left: 25%">
+      <b-button
+        @click="primaryClicked"
+        style="margin: 1%; width: 15%"
+        variant="primary"
+        >Primary</b-button
+      >
+      <b-button style="margin: 1%; width: 15%" variant="secondary"
+        >Secondary</b-button
+      >
+      <b-button style="margin: 1%; width: 15%" variant="success"
+        >Success</b-button
+      >
+      <b-button style="margin: 1%; width: 15%" variant="danger"
+        >Danger</b-button
+      >
     </div>
+    <b-input-group
+      prepend="New user"
+      style="width: 50%; margin-left: 22%; margin-top: 1%"
+    >
+      <b-form-input placeholder="name here" v-model="username"></b-form-input>
+      <b-form-input placeholder="age here" v-model="age"></b-form-input>
+      <b-input-group-append>
+        <b-button @click="InputUsername" variant="info">Enter</b-button>
+      </b-input-group-append>
+    </b-input-group>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent,ref } from "vue";
 
 export default defineComponent({
-    setup () {
-        
-
-        return {}
+  setup() {
+    let username= ref(undefined);
+    let age = ref(undefined);
+    function primaryClicked() {
+      console.log("Primary clicked");
     }
-})
+    function InputUsername(){
+        console.log('name: ', username.value, 'age: ', age.value);
+        username.value = undefined;
+        age.value = undefined;
+    }
+    return {
+      primaryClicked,
+      InputUsername,
+      username,
+      age
+    };
+  },
+});
 </script>
-
+s
 <style scoped>
-.topStyle{
-    border-style: solid;
-    border-color: red;
-    height: 20%;
+.topStyle {
+  border-style: solid;
+  border-color: red;
+  height: 20%;
 }
-
 </style>
