@@ -2,7 +2,9 @@
   <div class="topStyle">
     <div style="margin-left: 25%">
       <b-button @click="alertClicked" style="margin: 1%; width: 15%" variant="primary">Alert</b-button>
-      <b-button style="margin: 1%; width: 15%" variant="secondary">Secondary</b-button>
+      <b-button @click="showParametersPopUp = true" style="margin: 1%; width:15%" variant="secondary">Parameters</b-button>
+            <Parameters v-if="showParametersPopUp" @close="closeParameters">
+            </Parameters>
       <b-button style="margin: 1%; width: 15%" variant="success">Success</b-button>
       <b-button style="margin: 1%; width: 15%" variant="danger">Danger</b-button>
     </div>
@@ -19,11 +21,17 @@
 <script >
 import { defineComponent, ref, inject } from "vue";
 import Swal from "sweetalert2";
+import Parameters from './Parameters.vue';
+
 
 export default defineComponent({
+    components:{
+        Parameters
+    },
   setup() {
     let username = ref(undefined);
     let age = ref(undefined);
+    let showParametersPopUp = ref(false);
     const emitter = inject('emitter');
     function alertClicked() {
       Swal.fire("Alert clicked");
@@ -34,11 +42,16 @@ export default defineComponent({
       username.value = undefined;
       age.value = undefined;
     }
+    function closeParameters(){
+        showParametersPopUp.value = false
+    }
     return {
       alertClicked,
       InputUsername,
       username,
       age,
+      showParametersPopUp,
+      closeParameters
     };
   },
 });
