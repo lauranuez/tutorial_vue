@@ -14,11 +14,13 @@
 
 <!--Donde definimos variables y funciones que van a actuar a menida que interactuemos con los elementos que van en la template  -->
 <script>
-import { defineComponent, ref} from "vue";
+import { defineComponent, ref,onMounted} from "vue";
 import Left from "./components/Left.vue";
 import Right from "./components/Right.vue";
 import Top from "./components/Top.vue";
 import Bottom from "./components/Bottom.vue";
+import {io} from 'socket.io-client'
+import Swal from 'sweetalert2'
 
 export default defineComponent({
   name: "App",
@@ -30,12 +32,31 @@ export default defineComponent({
   },
   setup(){
     let connected = ref(false)
+    const socket = io('http://localhost:5000')
+    onMounted (()=>{
+      socket.on('connected', (msg) => {
+          Swal.fire({
+                title: "Notification on connection",
+                text: msg,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Yes"
+          }).then((result) => { // <--
+                if (result.value) { // <-- if confirmed
+                  connected.value = true;
+                }
+          }); 
+    });
+      })
     function toggle(){
-      connected.value = !connected.value;
+      socket.emit('connectPlatform')
+      //connected.value = !connected.value;
     }
     return{
       toggle,
-      connected
+      connected,
+      socket
     }
   }
 });
