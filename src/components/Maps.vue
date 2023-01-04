@@ -1,14 +1,28 @@
 <template>
   <div class="popup">
     <div class="popup-inner">
-      <div id="map"></div>
-      <b-button
-        style="width: 20%; margin-left: 1%; margin-top: 5%"
-        @click="close"
-        variant="danger"
-        size="lg"
-        >Close</b-button
-      >
+      <div style="display: flex">
+        <div id="map"></div>
+        <div id="wpTable">
+          <b-table :items="waypoints"> </b-table>
+        </div>
+      </div>
+      <div style="display: flex; margin-left: 20%">
+        <b-button
+          style="width: 20%; margin-left: 1%; margin-top: 5%"
+          @click="close"
+          variant="danger"
+          size="lg"
+          >Close</b-button
+        >
+        <b-button
+          style="width: 20%; margin-left: 1%; margin-top: 5%"
+          @click="clear"
+          variant="warning"
+          size="lg"
+          >Clear</b-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -22,6 +36,7 @@ export default {
     let popup = leaflet.popup();
     let count = 0;
     let waypoints = ref([]);
+    let tmpLine = undefined;
     onMounted(() => {
       map = leaflet.map("map").setView([41.276486, 1.9886], 13);
       let token =
@@ -47,6 +62,22 @@ export default {
     function onMapClick(e) {
       count = count + 1;
       console.log(e.latlng);
+      if (count > 1) {
+        let last = waypoints.value[waypoints.value.length - 1];
+        let distance = last.distanceTo(e.latlng).toFixed(0) / 1000;
+        let midpoint = new leaflet.LatLng(
+          (last.lat + e.latlng.lat) / 2,
+          (last.lng + e.latlng.lng) / 2
+        );
+        leaflet
+          .marker(midpoint, { opacity: 0.01 })
+          .addTo(map)
+          .bindTooltip(distance.toString(), {
+            permanent: true,
+            direction: "center",
+            className: "distance_label",
+          });
+      }
       waypoints.value.push(e.latlng);
       if (waypoints.value.length > 1)
         leaflet.polyline(waypoints.value, { color: "red" }).addTo(map);
@@ -60,22 +91,44 @@ export default {
       if (count > 0) {
         let last = waypoints.value[waypoints.value.length - 1];
         let distance = last.distanceTo(e.latlng).toFixed(0) / 1000;
-
-        popup.setLatLng(e.latlng).setContent(distance.toString()).openOn(map);
+        let midpoint = new leaflet.LatLng(
+          (last.lat + e.latlng.lat) / 2,
+          (last.lng + e.latlng.lng) / 2
+        );
+        popup.setLatLng(midpoint).setContent(distance.toString()).openOn(map);
+        if (tmpLine != undefined) {
+          tmpLine.remove(map);
+        }
+        tmpLine = leaflet
+          .polyline([last, e.latlng], { color: "red" })
+          .addTo(map);
       }
     }
     function onRightClick(e) {
+      if (tmpLine != undefined) {
+        tmpLine.remove(map);
+      }
       leaflet.polyline(waypoints.value, { color: "green" }).addTo(map);
     }
-
+    function clear() {
+      count = 0;
+      waypoints.value = [];
+      map.eachLayer((layer) => {
+        if (layer["_latlng"] != undefined) layer.remove();
+        if (layer["_path"] != undefined) layer.remove();
+      });
+    }
     return {
       close,
       onMapClick,
       onMapOver,
+      onRightClick,
       map,
       popup,
       count,
       waypoints,
+      tmpLine,
+      clear,
     };
   },
 };
@@ -105,6 +158,9 @@ export default {
   width: 80%;
   height: 600px;
   border-style: solid;
+}
+.distance_label {
+  background-color: yellow;
 }
 </style>
 

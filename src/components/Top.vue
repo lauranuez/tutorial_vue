@@ -83,7 +83,7 @@ export default defineComponent({
   },
 });
 </script>
-s
+
 <style scoped>
 .topStyle {
   border-style: solid;
