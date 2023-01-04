@@ -7,7 +7,8 @@
             </Parameters>
       <b-button @click="getValue" style="margin: 1%; width: 15%" variant="success">Get Value</b-button>
       <b-form-input style = "width:8%; margin-top:1%" disabled = "True" v-model="value" size="lg"></b-form-input> 
-      <b-button style="margin: 1%; width: 15%" variant="danger">Danger</b-button>
+      <b-button style="margin: 1%; width: 15%" @click="showMap = !showMap" variant="danger">Show Map</b-button>
+      <Map v-if="showMap" @close="closeMap"></Map>
     </div>
     <b-input-group prepend="New user" style="width: 50%; margin-left: 22%; margin-top: 1%">
       <b-form-input placeholder="name here" v-model="username"></b-form-input>
@@ -23,16 +24,19 @@
 import { defineComponent, ref, inject, onMounted } from "vue";
 import Swal from "sweetalert2";
 import Parameters from './Parameters.vue';
+import Map from './Maps.vue';
 
 
 export default defineComponent({
     components:{
-        Parameters
+        Parameters,
+        Map
     },
   setup() {
     let username = ref(undefined);
     let age = ref(undefined);
     let showParametersPopUp = ref(false);
+    let showMap = ref(false);
     const emitter = inject('emitter');
     let value = ref(undefined);
     let client = inject('mqttClient');
@@ -55,6 +59,9 @@ export default defineComponent({
     function closeParameters(){
         showParametersPopUp.value = false
     }
+    function closeMap(){
+        showMap.value = false
+    }
     function getValue(){
       client.publish("getValue", "");
       client.subscribe("Value");
@@ -69,7 +76,9 @@ export default defineComponent({
       closeParameters,
       getValue,
       value,
-      client
+      client,
+      showMap,
+      closeMap
     };
   },
 });
