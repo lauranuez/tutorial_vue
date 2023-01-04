@@ -13,8 +13,8 @@
 </template>
 
 <!--Donde definimos variables y funciones que van a actuar a menida que interactuemos con los elementos que van en la template  -->
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script>
+import { defineComponent, ref} from "vue";
 import Left from "./components/Left.vue";
 import Right from "./components/Right.vue";
 import Top from "./components/Top.vue";
@@ -31,7 +31,7 @@ export default defineComponent({
   setup(){
     let connected = ref(false)
     function toggle(){
-       connected.value = !connected.value;
+      connected.value = !connected.value;
     }
     return{
       toggle,
